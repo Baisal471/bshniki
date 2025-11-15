@@ -1,373 +1,256 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Наш Класс — Apple Style SPA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>7Б — История Класса</title>
 
 <style>
-/* ----- ОСНОВА APPLE ----- */
-body {
+/* ---------------- ОСНОВНЫЕ СТИЛИ ---------------- */
+* {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #fff;
-    color: #111;
-    overflow-x: hidden;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    scroll-behavior: smooth;
 }
 
-/* ----- ШАПКА ----- */
+body {
+    background: var(--bg);
+    color: var(--text);
+    transition: 0.3s ease;
+}
+
+/* Цветовые темы */
+:root {
+    --bg: #ffffff;
+    --text: #111;
+    --card: #f1f1f1;
+}
+
+.dark {
+    --bg: #0f0f0f;
+    --text: #f5f5f5;
+    --card: #1a1a1a;
+}
+
+/* ---------------- ШАПКА ---------------- */
+
 header {
-    position: fixed;
-    top: 0;
     width: 100%;
-    backdrop-filter: blur(20px);
-    background: rgba(255,255,255,0.75);
-    border-bottom: 1px solid #eee;
-    padding: 15px 0;
-    z-index: 1000;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.35);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-nav {
-    display: flex;
-    justify-content: center;
+.dark header {
+    background: rgba(0,0,0,0.35);
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
 }
 
 nav a {
-    margin: 0 18px;
+    margin-left: 18px;
+    font-weight: 600;
     text-decoration: none;
-    color: #000;
-    font-size: 17px;
-    font-weight: 300;
-    cursor: pointer;
-    transition: .2s;
+    color: var(--text);
+    transition: 0.2s;
 }
 
 nav a:hover {
-    color: #0071e3;
+    opacity: 0.6;
 }
 
-/* ----- ПАНОРАМА 3D ----- */
-#panorama {
-    width: 100%;
-    height: 350px;
-    background-image: url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1350&q=80");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transform: perspective(700px) rotateY(0deg);
-    transition: transform .2s linear;
+.theme-btn {
+    padding: 8px 15px;
+    border-radius: 10px;
+    background: var(--card);
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.25s;
 }
 
-/* ----- КОНТЕНТ ----- */
+.theme-btn:hover {
+    opacity: 0.7;
+}
+
+/* ---------------- КОНТЕЙНЕР СТРАНИЦ ---------------- */
+
 .page {
-    width: 70%;
-    margin: auto;
-    padding-top: 130px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    min-height: 100vh;
-    background: white;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: .6s ease;
-    pointer-events: none;
+    display: none;
+    padding: 40px 20px;
+    animation: fade 0.4s ease;
 }
 
-.page.active {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
+@keyframes fade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.page.prev {
-    opacity: 0;
-    transform: translateX(-100%);
-    pointer-events: none;
+.active {
+    display: block;
 }
 
-h1 {
-    font-weight: 300;
-    font-size: 50px;
-    margin-bottom: 10px;
+/* ---------------- КАРТОЧКИ ---------------- */
+
+.card {
+    background: var(--card);
+    padding: 25px;
+    margin: 20px auto;
+    border-radius: 16px;
+    max-width: 800px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: 0.3s;
 }
 
-p {
-    font-size: 20px;
-    line-height: 1.6;
-    font-weight: 300;
+.card:hover {
+    transform: scale(1.02);
 }
 
-/* Адаптация */
-@media(max-width: 800px){
-    .page { width: 90%; }
-    h1 { font-size: 38px; }
+/* ---------------- АДАПТАЦИЯ ---------------- */
+
+@media(max-width: 700px) {
+    nav {
+        display: none;
+    }
+    header {
+        justify-content: center;
+    }
+    .logo {
+        font-size: 20px;
+    }
+    .card { 
+        margin: 15px auto;
+        padding: 18px;
+    }
 }
 </style>
+
 </head>
 <body>
 
 <header>
+    <div class="logo">7Б</div>
+
     <nav>
-        <a onclick="openPage('main')">Главная</a>
-        <a onclick="openPage('history')">История</a>
-        <a onclick="openPage('legends')">Легенды</a>
-        <a onclick="openPage('famous')">Знаменитости</a>
-        <a onclick="openPage('experiments')">Эксперименты</a>
-        <a onclick="openPage('best')">Лучшие</a>
-        <a onclick="openPage('gone')">Ушедшие</a>
-        <a onclick="openPage('teachers')">Учителя</a>
-        <a onclick="openPage('bio')">Биографии</a>
-        <a onclick="openPage('devs')">Разработчики</a>
+        <a href="#home">Главная</a>
+        <a href="#history">История</a>
+        <a href="#legends">Легенды</a>
+        <a href="#stars">Знаменитости</a>
+        <a href="#experiments">Эксперименты</a>
+        <a href="#best">Лучшие</a>
+        <a href="#gone">Ушедшие</a>
+        <a href="#teachers">Учителя</a>
+        <a href="#bio">Биографии</a>
+        <a href="#devs">Разработчики</a>
     </nav>
+
+    <button class="theme-btn" id="themeBtn">Темно/Светло</button>
 </header>
 
-<div id="panorama"></div>
+<!-- ----------------- СТРАНИЦЫ ----------------- -->
 
-<!-- -------- ВСЕ “СТРАНИЦЫ” -------- -->
-
-<div id="main" class="page active">
-    <h1>Наш Класс</h1>
-    <p>Добро пожаловать на официальный сайт нашего класса, сделанный Эриком. Плавные страницы, анимации и потрясающая 3D-панорама.</p>
+<div id="home" class="page active">
+    <div class="card">
+        <h1>Добро пожаловать в 7Б!</h1><br>
+        <p>Самый легендарный, мощный и дружный класс. Здесь собрана наша история, биографии, легенды и самые яркие моменты школьной жизни.</p>
+    </div>
 </div>
 
 <div id="history" class="page">
-    <h1>История появления</h1>
-    <p>История создания и формирования нашего класса.</p>
-    <p>**История 7 “Б” класса
-
-(2023 — настоящее время)**
-
-История нашего 7 “Б” класса началась в далёком 2023 году, когда мы впервые собрались вместе в одном кабинете. Тогда мы были просто учениками разных школ, районов и интересов — немного растерянными, шумными, смешными и абсолютно уникальными. Но со временем мы стали чем-то большим. Мы стали классом.
-
-5 класс — Год знакомства и первых шагов
-
-2023 год стал стартовой точкой.
-Мы пришли в пятый класс, ещё не понимая, что впереди — столько общего:
-
-первые совместные перемены,
-
-первые споры и первые примирения,
-
-первые командные победы,
-
-первые школьные открытия.
-
-Мы учились не только математике, русскому или английскому — мы учились дружить.
-Некоторые из нас сразу нашли общий язык, другие — только после десятка перемен, но к концу года мы уже знали: мы — 5 “Б”.
-
-Это был год, когда наш класс начал приобретать свой характер — активный, смешной, шумный, но добрый.
-
-6 класс — Время роста, испытаний и команды
-
-В шестом классе мы стали взрослее.
-Кто-то получил свои первые пятёрки за сложные контрольные, кто-то — свои первые выговоры за слишком громкие перемены. Мы участвовали в школьных концертах, олимпиадах, соревнованиях, проектах — и всегда оставались командой.
-
-Именно в 6 классе появились:
-
-наши “легенды”,
-
-самые яркие школьные моменты,
-
-шутки, которые помнят только мы,
-
-первый настоящий «дух класса».
-
-Мы начали понимать друг друга с полуслова.
-И даже когда что-то не получалось — мы поддерживали.
-
-7 класс — Время уверенности, силы и единства
-
-Сегодня мы — 7 “Б”, класс, который знает, чего хочет.
-Мы выросли, стали умнее, смелее и намного дружнее.
-
-В этом году наш класс:
-
-участвует в проектах, олимпиадах, мероприятиях,
-
-развивается в спорте, науке, творчестве,
-
-стал более организованным и ответственным,
-
-научился держаться вместе.
-
-Мы уже не просто ученики.
-Мы — коллектив, где каждый важен.
-Каждый внёс свою часть в общую историю: кто-то талантом, кто-то юмором, кто-то трудом, кто-то поддержкой.</p>
+    <div class="card">
+        <h1>История появления класса</h1><br>
+        <p>Наш класс начал свой путь в 2023 году, когда мы впервые собрались в 5 классе...</p>
+    </div>
 </div>
 
 <div id="legends" class="page">
-    <h1>Легенды класса</h1>
-    <p>Самые легендарные личности и моменты.</p>
-    <p>Исан</p>
-    <p>Байхан</p>
-    <p>Айлин</p>
-    <p>Аяна</p>
-    <p>Тигран</p>
-    <p>Влада</p>
+    <div class="card">
+        <h1>Легенды класса</h1>
+        <p>Здесь собраны люди, события и истории, которые стали легендами.</p>
+    </div>
 </div>
 
-<div id="famous" class="page">
-    <h1>Знаменитости</h1>
-    <p>Ученики, которые прославили наш класс.</p>
-    <p>Исан</p>
-    <p>Айлин</p>
-    <p>Эрхан</p>
-    <p>Эрик</p>
-    <p>Маиза</p>
+<div id="stars" class="page">
+    <div class="card">
+        <h1>Знаменитости</h1>
+        <p>Самые яркие, популярные и талантливые ученики 7Б.</p>
+    </div>
 </div>
 
 <div id="experiments" class="page">
-    <h1>Эксперименты</h1>
-    <p>Проекты, исследования и открытия.</p>
-    <p>Эксперемент 001 - провал</p>
-    <p>Эксперемент 002 - провал</p>
-    <p>Эксперемент 003 - провал</p>
-    <p>Эксперемент 004 - провал</p>
-    <p>Эксперемент 005 - провал</p>
-    <p>Эксперемент 006 - провал</p>
-    <p>Эксперемент 007 - провал</p>
-    <p>Эксперемент 008 - провал</p>
-    <p>Эксперемент 009 - провал</p>
-    <p>Эксперемент 010 - удача</p>
-    <p>Эксперемент 011 - провал</p>
-    <p>Эксперемент 012 - провал</p>
-    <p>Эксперемент 013 - провал</p>
-    <p>Эксперемент 014 - провал</p>
-    <p>Эксперемент 015 - провал</p>
-    <p>Эксперемент 016 - провал</p>
-    <p>Эксперемент 017 - провал</p>
-    <p>Эксперемент 018 - провал</p>
-    <p>Эксперемент 019 - провал</p>
-    <p>Эксперемент 020 - провал</p>
-    <p>Эксперемент 021 - провал</p>
-    <p>Эксперемент 022 - провал</p>
-    <p>Эксперемент 023 - удача</p>
-    <p>Эксперемент 024 - провал</p>
-    <p>Эксперемент 025 - провал</p>
-    <p>Эксперемент 026 - провал</p>
-    <p>Эксперемент 027 - провал</p>
-    <p>Эксперемент 028 - провал</p>
-    <p>Эксперемент 029 - провал</p>
-    <p>Эксперемент 030 - провал</p>
-    <p>Эксперемент 031 - провал</p>
-    <p>Эксперемент 032 - неизвестно...</p>
+    <div class="card">
+        <h1>Эксперименты</h1>
+        <p>Наши школьные проекты, исследования и разработки.</p>
+    </div>
 </div>
 
 <div id="best" class="page">
-    <h1>Лучшие ученики</h1>
-    <p>Самые сильные, умные и ответственные.</p>
-    <p>Эрхан Аманов</p>
-    <p>Айлин Алмазова</p>
-    <p>Эрик Адыранов</p>
-    <p>Жалилова Маиза</p>
-    <p>Арина Джагусаева</p>
+    <div class="card">
+        <h1>Лучшие ученики</h1>
+        <p>Те, кто показал самые высокие результаты.</p>
+    </div>
 </div>
 
 <div id="gone" class="page">
-    <h1>Ушедшие</h1>
-    <p>Ученики, которые были с нами, но перешли в другие школы.</p>
-    <p>Тигран, Искендер.
+    <div class="card">
+        <h1>Ушедшие из класса</h1>
+        <p>Те, кто был частью нашей истории.</p>
+    </div>
 </div>
 
 <div id="teachers" class="page">
-    <h1>Учителя</h1>
-    <p>Наши педагоги. Наставники, поддержка и вдохновение.</p>
-    <p>Ирина Иновна-русский и литература</p>
-    <p>Айнура Кудайбергеновна -алгебра и геометрия </p>
-    <p>Алтынай Атабековна -Кыргызский язык 1группа </p>
-    <p>Мира Кинжекуловна-Кыргызский язык 2 группа и Адабият </p>
-    <p>Агай (его вроде Алинур зовут) уже ушёл</p>
-    <p>Санавар Матазимовна-физика </p>
-    <p>Виктория Генадьевна-инфарматика она уже ушла</p>
-    <p>Дарья Викторовна-физ ра уже ушла</p>
-    <p>Зинаида Васильевна-история и чио </p>
-    <p>Гульжан Турлалиевна-Английский Язык</p>
-    <p>Индира Жумагазиевна-Биология, ушла</p>
-    <p>Айгуль Бакытовна-Кыргызский Язык, ушла...</p>
+    <div class="card">
+        <h1>Учителя</h1>
+        <p>Учителя, которые внесли вклад в развитие нашего класса.</p>
+    </div>
 </div>
 
 <div id="bio" class="page">
-    <h1>Ученики</h1>
-    <p>Полные истории каждого ученика.</p>
-    <p>Абдикаримов Арсен</p>
-    <p>Абдилманапова Арзу</p>
-    <p>Абдурашидова Нагима</p>
-    <p>Абдыжапаров Алиярбек</p>
-    <p>Абдысаков Алымбек</p>
-    <p>Адыранов Эрик</p>
-    <p>Акылбеков Алибек</p>
-    <p>Алимова Айкокул</p>
-    <p>Алмазова Айлин</p>
-    <p>Аманалиев Илгиз</p>
-    <p>Аманов Эрхан</p>
-    <p>Анарбаева Татына</p>
-    <p>Асанбеков Арсен</p>
-    <p>Байдолетов Байсал</p>
-    <p>Бектуров Акбар</p>
-    <p>Джагусаева Арина</p>
-    <p>Дуйшоев Амирхан</p>
-    <p>Евгеньева Владислава</p>
-    <p>Жалилова Маиза</p>
-    <p>Жантороев Баймырза</p>
-    <p>Жекшенова Нурайым</p>
-    <p>Жумаев Амирхан</p>
-    <p>Ильясова Алия</p>
-    <p>Иминов Санжар</p>
-    <p>Исаева Канышай</p>
-    <p>Исмазова Алина</p>
-    <p>Кадыров Алим</p>
-    <p>Калиев Ильяс</p>
-    <p>Канкелов Бахтияр</p>
-    <p>Конушбаев Айдар</p>
-    <p>Кубанычбеков Изат</p>
-    <p>Курманалиева Аяна</p>
-    <p>Кушбаков Исан</p>
-    <p>Мамашарипов Бабур</p>
-    <p>Мамбетов Байхан</p>
-    <p>Мамбетова Айдай</p>
-    <p>Марленбеков Залкар</p>
-    <p>Муратов Бакай</p>
-    <p>Рахматтыло уулу Алибек</p>
-    <p>Эльбекова Алина</p>
-    <p>Эшимбекова Касиет</p>
+    <div class="card">
+        <h1>Биография учеников</h1>
+        <p>Каждый ученик — уникальная история.</p>
+    </div>
 </div>
 
 <div id="devs" class="page">
-    <h1>Разработчики</h1>
-    <p><b>Эрик Адыранов</b> — создатель, дизайнер и вдохновитель сайта.</p>
-    <p><b>Нурайым Жекшенова</b> - главный информатор сайта</p>
-    <p><b>Жалилова Маиза</b> - HR отдел сайта</p>
+    <div class="card">
+        <h1>Разработчики сайта</h1>
+        <p>Создатели, дизайнеры, редакторы и помощники проекта.</p>
+    </div>
 </div>
 
 <script>
-/* ----- 3D ПАНОРАМА ----- */
-const pano = document.getElementById("panorama");
-document.addEventListener("mousemove", e => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 20;
-    pano.style.transform = `perspective(700px) rotateY(${x}deg)`;
-});
+/* ------------------- ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ ------------------- */
+const themeBtn = document.getElementById("themeBtn");
+themeBtn.onclick = () => document.body.classList.toggle("dark");
 
-/* ----- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ (iPhone slide) ----- */
-let currentPage = "main";
+/* ------------------- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ ------------------- */
+function showPage() {
+    const pages = document.querySelectorAll(".page");
+    const id = location.hash.substring(1) || "home";
 
-function openPage(id){
-    if(id === currentPage) return;
-
-    const oldPage = document.getElementById(currentPage);
-    const newPage = document.getElementById(id);
-
-    oldPage.classList.remove("active");
-    oldPage.classList.add("prev");
-
-    newPage.classList.remove("prev");
-    setTimeout(() => newPage.classList.add("active"), 20);
-
-    currentPage = id;
+    pages.forEach(p => p.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
 }
+
+window.addEventListener("hashchange", showPage);
+showPage();
 </script>
 
 </body>
 </html>
+
+
 
